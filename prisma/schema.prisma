@@ -94,21 +94,33 @@ model MuxData {
 }
 
 model UserProgress {
-  userId    String
+  id String @id @default(uuid())
+
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
   chapterId String
+  chapter   Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
-  isCompleted Boolean   @default(false)
-  completedAt DateTime?
+  isCompleted Boolean @default(false)
 
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  @@id([userId, chapterId])
+  @@unique([userId, chapterId])
+  @@index([chapterId])
 }
 
 model Attachment {
-  id String @id @default(uuid())
+  id   String @id @default(uuid())
+  name String
+  url  String @db.Text
 
-  course   Course @relation(fields: [courseId], references: [id])
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
   courseId String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([courseId])
 }
