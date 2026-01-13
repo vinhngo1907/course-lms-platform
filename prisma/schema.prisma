@@ -41,8 +41,8 @@ model Course {
 
   chapters Chapter[]
 
-  user User @relation(fields: [userId], references: [id])
-  // attachments Attachment[]
+  user        User         @relation(fields: [userId], references: [id])
+  attachments Attachment[]
   // purchases   Purchase[]
 
   createdAt DateTime @default(now())
@@ -104,4 +104,11 @@ model UserProgress {
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   @@id([userId, chapterId])
+}
+
+model Attachment {
+  id String @id @default(uuid())
+
+  course   Course @relation(fields: [courseId], references: [id])
+  courseId String
 }
